@@ -1,0 +1,29 @@
+{
+	"name": "aen-bot",
+	"version": "0.0.1",
+	"description": "A bot framework for AenJojo's Bots",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node index.js"
+	},
+	"engines": {
+		"node": "12.x"
+	},
+	"repository": {
+		"url": "https://github.com/AmethystAnimion/Aen-Bot"
+	},
+	"author": "Aen Jojo",
+	"license": "AGPL-3.0",
+	"keywords": [
+		"node",
+		"aen-bot",
+		"aenjojo"
+	],
+	"dependencies": {
+		"common-tags": "^1.8.0"
+	},
+	"peerDependencies": {
+		"discord.js": "^12.2.0"
+	}
+}
