@@ -1,5 +1,4 @@
 # Aen-Bot
-=======
 Aen-Bot is a discord bot framework that built on top of [discord.js](https://github.com/discordjs/discord.js).
 
 Built-in Command:
