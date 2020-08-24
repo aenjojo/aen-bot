@@ -5,6 +5,7 @@ module.exports = class extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'reload',
+			aliases: ['r'],
 			group: 'owner',
 			ownerOnly: true,
 			help: {

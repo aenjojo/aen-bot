@@ -21,9 +21,7 @@
 		"aenjojo"
 	],
 	"dependencies": {
-		"common-tags": "^1.8.0"
-	},
-	"peerDependencies": {
+		"common-tags": "^1.8.0",
 		"discord.js": "^12.2.0"
 	}
 }
