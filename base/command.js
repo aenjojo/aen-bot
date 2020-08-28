@@ -1,5 +1,11 @@
 Object.mergeDefault = require('discord.js').Util.mergeDefault;
 
+/**
+ * @constructor
+ * @param {client} client - To set the command to Discord client 
+ * @param {object} options - Command's options
+ */
+
 class Command {
 	constructor(client, options = {}) {
 		let opts = Object.mergeDefault(DefSetting, options);

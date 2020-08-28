@@ -1,4 +1,4 @@
-class Validate {
+class CommandValider {
 	constructor(client, message) {
 		this.client = client;
 		this.msg = message;
@@ -116,4 +116,4 @@ class Validate {
 	}
 }
 
-module.exports = Validate;
+module.exports = CommandValider;
