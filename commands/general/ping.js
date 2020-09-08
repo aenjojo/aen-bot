@@ -9,15 +9,11 @@ module.exports = class extends Command {
 			group: 'general',
 			help: {
 				description: 'Do a ping test to check bot\'s connection to Discord'
-			},
-			cooldown: {
-				usage: 2,
-				time: 6000
 			}
 		})
 	}
 	
-	async run(msg, args) {
+	async run(msg) {
 		const ping = await msg.channel.send('🏓 Pong!');
 		
 		return ping.edit(oneLine`

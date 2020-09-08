@@ -43,7 +43,7 @@ module.exports = class extends Command {
 				${cmdName.aliases.length > 0 ? `with \`${cmdName.aliases}\` as aliases.`: ''}
 			`)
 		} catch (e) {
-			console.log(`Error: Command ${cmd} can't be loaded`)
+			console.log(`Error: Command ${cmd} can't be loaded\n${e}`)
 		}
 	}
 }

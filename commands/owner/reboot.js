@@ -13,7 +13,7 @@ module.exports = class extends Command {
 		});
 	}
 	
-	async run(msg, args) {
+	async run(msg) {
 		let m = await msg.channel.send("Rebooting...");
 		
 		await this.client.destroy();

@@ -81,7 +81,7 @@ class CommandValider {
 			
 			if (usage <= 0) {
 				let TS = timestamp - (lastTS + cooldown.time);
-				let time_left = TS < 0 ? `You must wait ${(-(TS/1000)).toFixed(2)}s before using this command`: true;
+				let time_left = TS < 0 ? `You must wait ${(-(TS/1000)).toFixed(2)}s before using this command again.`: true;
 				
 				if (time_left !== true) {
 					channel.send(time_left);
