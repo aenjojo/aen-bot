@@ -5,7 +5,7 @@ module.exports = {
 
 	// src/structure (required)
 	CommandValider: require('./src/structures/commandValider'),
-	// CheckUser: require('./src/structures/checkUser),
+	GetUser: require('./src/structures/getUser'),
 
 	// src/libs (additional)
 	Capitalize: require('./src/libs/capitalize'),
