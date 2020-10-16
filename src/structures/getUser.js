@@ -36,6 +36,43 @@ class GetUser {
 
 		result = result.first(10);
 		
+		return this.fetchTen(result);
+	}
+
+	getByNickname() {
+
+	}
+
+	getByTagName() {
+
+	}
+
+	async validate() {
+		// check if id
+		if(this.user.match(/^\d{18}$/g)) {
+			return this.getByID();
+		}
+		/* check if mention
+		else if (this.user.match(/^<@\d{18}>$/g)) {
+
+		}
+		// check if tag
+		else if (this.user.match(/^[\w\W]+#\d{4}$/g)) {
+
+		}
+		// check if nickname
+		else if (this.user.match()) {
+
+		}*/
+		// check if username
+		else if (this.user.match(/^[\w\W]+[^#\d{4}]/g)) {
+			return await this.getByUsername();
+		}
+		// else
+		return false;
+	}
+
+	async fetchTen(result) {
 		let msg = await this.msg.channel.send(stripIndents`
 			There are ${result.length} users found:
 			\`\`\`
@@ -78,39 +115,6 @@ class GetUser {
 				return await msg.edit('Command cancelled.');
 			}
 		});
-	}
-
-	getByNickname() {
-
-	}
-
-	getByTagName() {
-
-	}
-
-	async validate() {
-		// check if id
-		if(this.user.match(/^\d{18}$/g)) {
-			return this.getByID();
-		}
-		/* check if mention
-		else if (this.user.match(/^<@\d{18}>$/g)) {
-
-		}
-		// check if tag
-		else if (this.user.match(/^[\w\W]+#\d{4}$/g)) {
-
-		}
-		// check if nickname
-		else if (this.user.match()) {
-
-		}*/
-		// check if username
-		else if (this.user.match(/^[\w\W]+[^#\d{4}]/g)) {
-			return await this.getByUsername();
-		}
-		// else
-		return false;
 	}
 }
 
