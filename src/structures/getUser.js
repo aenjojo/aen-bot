@@ -25,7 +25,7 @@ class GetUser {
 		return this.cmd(this.msg, result);
 	}
 
-	getByUsername() {
+	async getByUsername() {
 		let result = this.cache.filter(user => user.username.toLowerCase().startsWith(this.user.toLowerCase()));
 
 		if (result.size === 1) {
@@ -36,7 +36,7 @@ class GetUser {
 
 		result = result.first(10);
 		
-		let msg = this.msg.channel.send(stripIndents`
+		let msg = await this.msg.channel.send(stripIndents`
 			There are ${result.length} users found:
 			\`\`\`
 				${result.map((data, index) => `[${index}] ${data.id} : ${data.username}`).join('\n')}
@@ -61,7 +61,7 @@ class GetUser {
 				return collector.stop();
 			}
 		});
-		collector.on('end', c => {
+		collector.on('end', async c => {
 			// c.last() takes the last data collected from collector
 			// {content: ''} to prevent error if no message collected
 			let lastData = c.last() || {content: ''};
@@ -70,11 +70,12 @@ class GetUser {
 			if (lastData.content.match(/[0-9]/g)) {
 				choice = result[Number(lastData.content)];
 
+				await msg.delete();
 				return this.cmd(this.msg, choice);
 			}
 			// return cancel if no match / no message collected
 			else {
-				return this.msg.channel.send('Command cancelled.');
+				return await msg.edit('Command cancelled.');
 			}
 		});
 	}
@@ -106,7 +107,7 @@ class GetUser {
 		}*/
 		// check if username
 		else if (this.user.match(/^[\w\W]+[^#\d{4}]/g)) {
-			return this.getByUsername();
+			return await this.getByUsername();
 		}
 		// else
 		return false;
