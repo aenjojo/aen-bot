@@ -11,3 +11,6 @@ Built-in Command:
 | `ping`   | Send ping test to check the connection to Discord API           | `<prefix> ping`                     |
 | `help`   | Send help message (include help message for each command/group) | `<prefix> help [command: string]`   |
 | `eval`   | Evaluate a JavaScript code right in your discord guild/server   | `<prefix> eval <script: string>`    |
+
+Created by Aen Jojo
+Discord: AenmaAnimion#9169

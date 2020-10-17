@@ -35,16 +35,27 @@ class GetUser {
 		}
 
 		result = result.first(10);
+		let data = result.map((data, index) => `[${index}] ${data.id} : ${data.username}`).join('\n')
 		
-		return this.fetchTen(result);
+		return this.fetchTen(result, data);
 	}
 
 	getByNickname() {
 
 	}
 
-	getByTagName() {
+	async getByTagName() {
+		let result = this.cache.filter(user => user.tag.toLowerCase().startsWith(this.user.toLowerCase()));
 
+		if (result.size === 1) {
+			result = result.first();
+
+			return this.cmd(this.msg, result);
+		}
+
+		let data = result.map((data, index) => `[${index}] ${data.id} : ${data.username}`).join('\n')
+		
+		return this.fetchTen(result, data);
 	}
 
 	async validate() {
@@ -55,12 +66,12 @@ class GetUser {
 		/* check if mention
 		else if (this.user.match(/^<@\d{18}>$/g)) {
 
-		}
+		}*/
 		// check if tag
 		else if (this.user.match(/^[\w\W]+#\d{4}$/g)) {
-
+			return await this.getByTagName();
 		}
-		// check if nickname
+		/* check if nickname
 		else if (this.user.match()) {
 
 		}*/
@@ -72,17 +83,16 @@ class GetUser {
 		return false;
 	}
 
-	async fetchTen(result) {
+	async fetchTen(result, data) {
 		let msg = await this.msg.channel.send(stripIndents`
 			There are ${result.length} users found:
-			\`\`\`
-				${result.map((data, index) => `[${index}] ${data.id} : ${data.username}`).join('\n')}
-			\`\`\`
+			\`\`\`${data}\`\`\`
 			Type the coresponding number next to the user to choose. Type \`ABORT\` to cancel.
 		`);
 
 		// expression if 0 to 9 or abort [1]
-		const regex = new RegExp(`[0-${result.length-1}]|abort`, 'ig');
+		const length = result.length > 0 ? result.length - 1 : result.length;
+		const regex = new RegExp(`[0-${length}]|abort`, 'ig');
 		const filter = m => m.author.id === this.msg.author.id;
 		const collector = this.msg.channel.createMessageCollector(filter, {time: 10000});
 
