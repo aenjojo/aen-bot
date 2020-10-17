@@ -33,6 +33,9 @@ class GetUser {
 
 			return this.cmd(this.msg, result);
 		}
+		else if (result.size === 0) {
+			return await this.msg.channel.send('No result found');
+		}
 
 		result = result.first(10);
 		let data = result.map((data, index) => `[${index}] ${data.id} : ${data.username}`).join('\n')
@@ -51,6 +54,9 @@ class GetUser {
 			result = result.first();
 
 			return this.cmd(this.msg, result);
+		}
+		else if (result.size === 0) {
+			return await this.msg.channel.send('No result found');
 		}
 
     result = result.first(10);
@@ -123,7 +129,7 @@ class GetUser {
 			}
 			// return cancel if no match / no message collected
 			else {
-				return await msg.edit('Command cancelled.');
+				return await msg.edit('Command canceled.');
 			}
 		});
 	}
