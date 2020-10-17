@@ -53,6 +53,7 @@ class GetUser {
 			return this.cmd(this.msg, result);
 		}
 
+    result = result.first(10);
 		let data = result.map((data, index) => `[${index}] ${data.id} : ${data.username}`).join('\n')
 		
 		return this.fetchTen(result, data);
