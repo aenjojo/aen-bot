@@ -1,4 +1,6 @@
-class CommandValider {
+const { stripIndents } = require('common-tags');
+
+class CommandValidator {
 	constructor(client, message) {
 		this.client = client;
 		this.msg = message;
@@ -67,7 +69,10 @@ class CommandValider {
 		if (perms.length !== 0 && !guild.member(userID).hasPermission(perms)) {
 			let permsList = perms.join('`, `').replace(/\_/g, ' ').toLowerCase();
 			
-			channel.send(`I didn't have the followed permission to use this command: \`${permsList}\``);
+			channel.send(stripIndents`
+				I need the followed permissions to use this command: \`${permsList}\`
+				Make sure you enable those permissions first.
+			`);
 			return false;
 		}
 		return true;
@@ -116,4 +121,4 @@ class CommandValider {
 	}
 }
 
-module.exports = CommandValider;
+module.exports = CommandValidator;

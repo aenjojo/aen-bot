@@ -58,11 +58,10 @@ class GetUser {
 		else if (result.size === 0) {
 			return await this.msg.channel.send('No result found');
 		}
+	}
 
-    result = result.first(10);
-		let data = result.map((data, index) => `[${index}] ${data.id} : ${data.username}`).join('\n')
-		
-		return this.fetchTen(result, data);
+	getMention() {
+
 	}
 
 	async validate() {

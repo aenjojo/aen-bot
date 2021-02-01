@@ -4,8 +4,9 @@ module.exports = {
 	Command: require('./base/command'),
 
 	// src/structure (required)
-	CommandValider: require('./src/structures/commandValider'),
+	CommandValidator: require('./src/structures/commandValidator'),
 	GetUser: require('./src/structures/getUser'),
+	Paginator: require('./src/structures/paginator'),
 
 	// src/libs (additional)
 	Capitalize: require('./src/libs/capitalize'),

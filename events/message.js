@@ -1,4 +1,4 @@
-const { CommandValider } = require('../index');
+const { CommandValidator } = require('../index');
 
 module.exports = class {
 	constructor(client) {
@@ -23,7 +23,7 @@ module.exports = class {
 		
 		if (!command) return;
 		
-		const validation = new CommandValider(this.client, msg);
+		const validation = new CommandValidator(this.client, msg);
 		const validRes = validation.validateCommand({
 			owner: command.owner,
 			guild: command.guild,
