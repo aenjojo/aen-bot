@@ -18,28 +18,33 @@ module.exports = class extends Command {
 	}
 	
 	async run(msg, args) {
-		let [cmd] = args, cmdName;
+		let [grp, cmd] = args;
 		
-		if (!cmd) return msg.channel.send(`No command entered. Please specify a command to be unloaded.`);
+		if (!grp || !cmd) return msg.channel.send(`No group/command entered. Please specify a group/command to be unloaded.`);
 		
-		try {
-			cmdName = this.client.command.find(c => c.name == cmd || c.aliases.includes(cmd));
-		} catch (e) {
+		let cmdData = this.client.command.find(c => c.name == cmd || c.aliases.includes(cmd));
+		
+		if (!cmdData) {
 			return msg.channel.send(`Command ${cmd} not exist`);
 		}
 		
 		try {
-			let dir = cmdName.path;
+			let dir = cmdData.path;
 		
-			await this.client.command.splice(this.client.command.findIndex(c => Object.is(c, cmdName)), 1);
+			let indexGroup = this.client.group.findIndex(arr => arr[0] == grp);
+			let indexCmd = this.client.group[indexGroup][1].findIndex(index => index == cmd);
+			
+			await this.client.group[indexGroup][1].splice(indexCmd, 1);
+
+			await this.client.command.splice(this.client.command.findIndex(c => Object.is(c, cmdData)), 1);
 			delete require.cache[require.resolve(`${this.client.basedir}${dir}`)];
 		
 			return msg.channel.send(oneLine`
-				Unloaded \`${cmdName.name}\` command
-				${cmdName.aliases.length > 0 ? `with \`${cmdName.aliases}\` as aliases.`: ''}
+				Unloaded \`${cmdData.name}\` command
+				${cmdData.aliases.length > 0 ? `with \`${cmdData.aliases}\` as aliases.`: ''}
 			`)
 		} catch (e) {
-			console.log(`Error: Command ${cmd} can't be loaded`)
+			console.log(`Error: Command ${cmd} can't be unloaded`)
 		}
 	}
 }

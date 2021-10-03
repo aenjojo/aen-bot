@@ -10,20 +10,21 @@ class CommandValidator {
 		let authorID = this.msg.author.id;
 		let channel = this.msg.channel;
 		let guild = this.msg.guild;
+		let dm = this.msg.channel.type == 'dm' ? true : false;
 
 		let valOwner = this.val_owner(type.owner, authorID, this.client.conf.owner);
 		let valGuild = this.val_guild(type.guild, channel);
 		let valNSFW = this.val_nsfw(type.nsfw, channel);
-		let valUPerms = this.val_uPerms(type.uPerms, channel, guild, authorID);
-		let valCPerms = this.val_cPerms(type.cPerms, channel, guild, this.client.user.id);
+		let valUPerms = dm || this.val_uPerms(type.uPerms, channel, guild, authorID);
+		let valCPerms = dm || this.val_cPerms(type.cPerms, channel, guild, this.client.user.id);
 		let valCD = this.val_cd(type.cooldown, channel, this.msg.createdTimestamp, authorID);
 
-		if (valOwner === true &&
-			valGuild === true &&
-			valNSFW === true &&
-			valUPerms === true &&
-			valCPerms === true &&
-			valCD === true) return true;
+		if (valOwner === true
+			&& valGuild === true
+			&& valNSFW === true
+			&& valUPerms === true
+			&& valCPerms === true
+			&& valCD === true) return true;
 		else return false;
 	}
 	
@@ -48,7 +49,7 @@ class CommandValidator {
 	*/
 
 	val_nsfw(nsfw, channel) {
-		if (nsfw === true && channel.nsfw === false) {
+		if (nsfw === true && channel.nsfw === undefined) {
 			channel.send('You can use this command in nsfw channel only.');
 			return false;  
 		}

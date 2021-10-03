@@ -1,5 +1,5 @@
 const { Command, Capitalize } = require('../../index');
-const { stripIndents, commaListsAnd, oneLine } = require('common-tags');
+const { stripIndents, oneLine } = require('common-tags');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = class extends Command {
@@ -28,8 +28,17 @@ module.exports = class extends Command {
 				.setTitle('Help Message')
 				.setDescription('Here is the list of all commands.')
 
-			this.client.group.map(gi => {
-				embed = embed.addField(new Capitalize(gi[0]).onlyFirstLetter, gi[1].join(', '))
+			this.client.group.sort().map(gi => {
+				embed = embed.addField(
+					new Capitalize(gi[0]).onlyFirstLetter,
+					(
+						gi[1].length > 1
+							? gi[1].sort().join(', ')
+							: gi[1].length == 1
+								? gi[1]
+								: '-empty-'
+					)
+				)
 			});
 		}
 		if (command !== false) {
