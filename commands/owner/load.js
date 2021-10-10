@@ -1,6 +1,5 @@
 const { Command } = require('../../index');
 const { oneLine } = require('common-tags');
-const path = require('path');
 
 module.exports = class extends Command {
 	constructor(client) {
@@ -33,10 +32,9 @@ module.exports = class extends Command {
 		}
 			
 		try {
-			let dir = path.join('commands', grp);
-			let file = `${cmd}.js`;
+			let dir = `/commands/${grp}/${cmd}.js`;
 	
-			await this.client.registry.registerCommand(this.client.basedir, dir, file);
+			await this.client.load(dir, this.client.basedir);
 
 			let cmdName = this.client.command.find(c => c.name == cmd)
 			let indexGroup = this.client.group.findIndex(arr => arr[0] == grp);
