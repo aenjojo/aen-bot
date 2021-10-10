@@ -1,5 +1,6 @@
 const { Command } = require('../../index');
 const { oneLine } = require('common-tags');
+const path = require('path');
 
 module.exports = class extends Command {
 	constructor(client) {
@@ -31,12 +32,14 @@ module.exports = class extends Command {
 		}
 		
 		try {
-			let dir = cmdName.path;
+			let cmdpath = cmdName.path.split('/');
+			let dir = cmdpath[0];
+			let filename = cmdpath[1];
 			
 			await this.client.command.splice(this.client.command.findIndex(c => Object.is(c, cmdName)), 1);
-			delete require.cache[require.resolve(`${this.client.basedir}${dir}`)];
+			delete require.cache[require.resolve(path.join(this.client.basedir, cmdpath.join('/')))];
 		
-			await this.client.load(dir, this.client.basedir);
+			await this.client.registry.registerCommand(this.client.basedir, dir, filename);
 		
 			return msg.channel.send(oneLine`
 				Reloaded \`${cmdName.name}\` command

@@ -1,5 +1,6 @@
 const { promisify } = require('util');
 const readdir = promisify(require('fs').readdir);
+const path = require('path');
 
 /**
  * @constructor
@@ -32,23 +33,27 @@ class Registry {
 		return this;
 	}
 
-	registerCommand(root, group, file, list = []) {
-		let dir = `/commands/${group}/${file}`;
+	registerCommand(root, groupdir, file, list = []) {
+		let dir = path.join(groupdir, file);
 		let filename = file.split('.')[0];
-
+		
+		let cmd = new (require(path.join(root, dir)))(this.client);
+		cmd.path = dir;
+		
+		if (!cmd) return `Directory: ${dir} not exist`;
+		
 		list.push(filename);
-		this.client.load(dir, root);
-
-		return list;
+		this.client.command.push(cmd);
 	}
 
-	async registerCommands(group = []) {
+	async registerCommands(cmddir, group = []) {
 		for (let x of group) {
-			let files = await readdir(`./commands/${x}/`);
+			let dir = path.join(cmddir, x);
+			let files = await readdir('.'+dir);
 			let cmdList = new Array();
 		
 			files.forEach(file => {
-				this.registerCommand(this.client.basedir, x, file, cmdList);
+				this.registerCommand(this.client.basedir, dir, file, cmdList);
 			});
 
 			this.client.group.push([x, cmdList]);
@@ -58,16 +63,18 @@ class Registry {
 	}
 
 	registerDefault() {
-		this.registerEvent('..', 'ready');
-		this.registerEvent('..', 'message');
+		let root = '..';
 
-		this.registerCommand('..', 'general', 'ping');
-		this.registerCommand('..', 'general', 'help');
-		this.registerCommand('..', 'owner', 'eval');
-		this.registerCommand('..', 'owner', 'load');
-		this.registerCommand('..', 'owner', 'reboot');
-		this.registerCommand('..', 'owner', 'reload');
-		this.registerCommand('..', 'owner', 'unload');
+		this.registerEvent(root, 'ready');
+		this.registerEvent(root, 'message');
+
+		this.registerCommand(root, '/commands/general', 'ping.js');
+		this.registerCommand(root, '/commands/general', 'help.js');
+		this.registerCommand(root, '/commands/owner', 'load.js');
+		this.registerCommand(root, '/commands/owner', 'eval.js');
+		this.registerCommand(root, '/commands/owner', 'reboot.js');
+		this.registerCommand(root, '/commands/owner', 'reload.js');
+		this.registerCommand(root, '/commands/owner', 'unload.js');
 
 		this.client.group.push(['general', ['help', 'ping']]);
 

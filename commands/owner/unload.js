@@ -1,5 +1,6 @@
 const { Command } = require('../../index');
 const { oneLine } = require('common-tags');
+const path = require('path');
 
 module.exports = class extends Command {
 	constructor(client) {
@@ -37,7 +38,7 @@ module.exports = class extends Command {
 			await this.client.group[indexGroup][1].splice(indexCmd, 1);
 
 			await this.client.command.splice(this.client.command.findIndex(c => Object.is(c, cmdData)), 1);
-			delete require.cache[require.resolve(`${this.client.basedir}${dir}`)];
+			delete require.cache[require.resolve(path.join(this.client.basedir, dir))];
 		
 			return msg.channel.send(oneLine`
 				Unloaded \`${cmdData.name}\` command
