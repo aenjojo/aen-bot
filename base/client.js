@@ -7,7 +7,7 @@ const Registry = require('./registry');
  */
 
 class AenBot extends Client {
-	constructor(options = {}) {
+	constructor(options) {
 		super(options);
 		
 		this.prefix = options.prefix;

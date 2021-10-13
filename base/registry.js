@@ -14,8 +14,8 @@ class Registry {
 		return this;
 	}
 
-	registerEvent(dir, file) {
-		let evtFunc = new (require(`${dir}/events/${file}`))(this.client);
+	registerEvent(basedir, evtdir, file) {
+		let evtFunc = new (require(path.join(basedir, evtdir, file)))(this.client);
 		let	evtName = file.split('.')[0];
 			
 		this.client.on(evtName, (...args) => {
@@ -23,11 +23,11 @@ class Registry {
 		});
 	}
 
-	async registerEvents() {
-		let files = await readdir(`./events/`);
+	async registerEvents(evtdir) {
+		let files = await readdir('./'+evtdir);
 		
 		files.forEach(file => {
-			this.registerEvent(this.client.basedir, file);
+			this.registerEvent(this.client.basedir, evtdir, file);
 		});
 
 		return this;
@@ -46,10 +46,10 @@ class Registry {
 		this.client.command.push(cmd);
 	}
 
-	async registerCommands(cmddir, group = []) {
+	async registerCommands(cmddir, group) {
 		for (let x of group) {
 			let dir = path.join(cmddir, x);
-			let files = await readdir('.'+dir);
+			let files = await readdir('./'+dir);
 			let cmdList = new Array();
 		
 			files.forEach(file => {
@@ -62,21 +62,9 @@ class Registry {
 		return this;
 	}
 
-	registerDefault() {
-		let root = '..';
-
-		this.registerEvent(root, 'ready');
-		this.registerEvent(root, 'message');
-
-		this.registerCommand(root, '/commands/general', 'ping.js');
-		this.registerCommand(root, '/commands/general', 'help.js');
-		this.registerCommand(root, '/commands/owner', 'load.js');
-		this.registerCommand(root, '/commands/owner', 'eval.js');
-		this.registerCommand(root, '/commands/owner', 'reboot.js');
-		this.registerCommand(root, '/commands/owner', 'reload.js');
-		this.registerCommand(root, '/commands/owner', 'unload.js');
-
-		this.client.group.push(['general', ['help', 'ping']]);
+	register({ eventDirectory, commandDirectory, commandGroup }) {
+		this.registerEvents(eventDirectory);
+		this.registerCommands(commandDirectory, commandGroup);
 
 		return this;
 	}
