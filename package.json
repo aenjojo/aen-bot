@@ -1,6 +1,6 @@
 {
 	"name": "aen-bot",
-	"version": "0.0.4",
+	"version": "0.0.6",
 	"description": "A bot framework for AenJojo's Bots",
 	"main": "index.js",
 	"scripts": {

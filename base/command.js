@@ -20,6 +20,7 @@ class Command {
 		this.guild = opts.guildOnly;
 		//this.donor = opts.donorOnly;
 		this.nsfw = opts.nsfw;
+		this.hidden = opts.hidden;
 		this.Cperms = opts.clientPermissions;
 		this.Uperms = opts.userPermissions;
 		this.help = opts.help;
@@ -36,6 +37,7 @@ const DefSetting = {
 	guildOnly: false,
 	donorOnly: false,
 	nsfw: false,
+	hidden: false,
 	clientPermissions: new Array(),
 	userPermissions: new Array(),
 	help: {

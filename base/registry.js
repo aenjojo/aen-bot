@@ -1,5 +1,6 @@
 const { promisify } = require('util');
 const readdir = promisify(require('fs').readdir);
+const path = require('path');
 
 /**
  * @constructor
@@ -13,8 +14,8 @@ class Registry {
 		return this;
 	}
 
-	registerEvent(dir, file) {
-		let evtFunc = new (require(`${dir}/events/${file}`))(this.client);
+	registerEvent(basedir, evtdir, file) {
+		let evtFunc = new (require(path.join(basedir, evtdir, file)))(this.client);
 		let	evtName = file.split('.')[0];
 			
 		this.client.on(evtName, (...args) => {
@@ -22,33 +23,37 @@ class Registry {
 		});
 	}
 
-	async registerEvents() {
-		let files = await readdir(`./events/`);
+	async registerEvents(evtdir) {
+		let files = await readdir('./'+evtdir);
 		
 		files.forEach(file => {
-			this.registerEvent(this.client.basedir, file);
+			this.registerEvent(this.client.basedir, evtdir, file);
 		});
 
 		return this;
 	}
 
-	registerCommand(root, group, file, list = []) {
-		let dir = `/commands/${group}/${file}`;
+	registerCommand(root, groupdir, file, list = []) {
+		let dir = path.join(groupdir, file);
 		let filename = file.split('.')[0];
-
+		
+		let cmd = new (require(path.join(root, dir)))(this.client);
+		cmd.path = dir;
+		
+		if (!cmd) return `Directory: ${dir} not exist`;
+		
 		list.push(filename);
-		this.client.load(dir, root);
-
-		return list;
+		this.client.command.push(cmd);
 	}
 
-	async registerCommands(group = []) {
+	async registerCommands(cmddir, group) {
 		for (let x of group) {
-			let files = await readdir(`./commands/${x}/`);
+			let dir = path.join(cmddir, x);
+			let files = await readdir('./'+dir);
 			let cmdList = new Array();
 		
 			files.forEach(file => {
-				this.registerCommand(this.client.basedir, x, file, cmdList);
+				this.registerCommand(this.client.basedir, dir, file, cmdList);
 			});
 
 			this.client.group.push([x, cmdList]);
@@ -57,19 +62,9 @@ class Registry {
 		return this;
 	}
 
-	registerDefault() {
-		this.registerEvent('..', 'ready');
-		this.registerEvent('..', 'message');
-
-		this.registerCommand('..', 'general', 'ping');
-		this.registerCommand('..', 'general', 'help');
-		this.registerCommand('..', 'owner', 'eval');
-		this.registerCommand('..', 'owner', 'load');
-		this.registerCommand('..', 'owner', 'reboot');
-		this.registerCommand('..', 'owner', 'reload');
-		this.registerCommand('..', 'owner', 'unload');
-
-		this.client.group.push(['general', ['help', 'ping']]);
+	register({ eventDirectory, commandDirectory, commandGroup }) {
+		this.registerEvents(eventDirectory);
+		this.registerCommands(commandDirectory, commandGroup);
 
 		return this;
 	}
