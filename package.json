@@ -1,6 +1,12 @@
 {
 	"name": "aen-bot",
+<<<<<<< HEAD
 	"version": "0.0.6",
+||||||| 1224fab
+	"version": "0.0.5",
+=======
+	"version": "0.0.4",
+>>>>>>> 9a99e549acfa46d9bbc1faa3f551ecbbdf4c65be
 	"description": "A bot framework for AenJojo's Bots",
 	"main": "index.js",
 	"scripts": {
