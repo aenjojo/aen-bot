@@ -14,20 +14,11 @@ class AenBot extends Client {
 		this.conf = options.config;
 		this.basedir = options.basedir;
 		
-		this.registry = new Registry(this);
 		this.command = new Array();
 		this.group = new Array();
+		this.registry = new Registry(this);
 		
 		return this;
-	}
-	
-	load(dir, base = "") {
-		let cmd = new (require(`${base}${dir}`))(this);
-		cmd.path = dir;
-		
-		if (!cmd) return `Directory: ${dir} not exist`;
-		
-		this.command.push(cmd);
 	}
 }
 
